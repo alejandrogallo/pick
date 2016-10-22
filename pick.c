@@ -39,6 +39,7 @@ enum {
 	ALT_ENTER,
 	BACKSPACE,
 	DEL,
+	ESC,
 	ENTER,
 	CTRL_A,
 	CTRL_E,
@@ -330,6 +331,10 @@ selected_choice(void)
 
 		key = get_key(buf, sizeof(buf), &length);
 		switch (key) {
+		case ESC:
+			tty_restore();
+			exit(0);
+			break;
 		case ENTER:
 			if (choices_count > 0)
 				return &choices.v[selection];
@@ -757,6 +762,7 @@ get_key(char *buf, size_t size, size_t *nread)
 		{ "\177",	1,	BACKSPACE },
 		{ "\001",	1,	CTRL_A },
 		{ "\002",	1,	LEFT },
+		{ "\x1b",	1,	ESC },
 		{ "\004",	1,	DEL },
 		{ "\005",	1,	CTRL_E },
 		{ "\006",	1,	RIGHT },
